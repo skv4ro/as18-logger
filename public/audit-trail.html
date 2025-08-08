@@ -1,0 +1,99 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/daterangepicker.css" />
+
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <script src="/js/datatables.min.js"></script>
+
+    <title>🔀 Audit Trail</title>
+    <style>
+        html {
+            background-color: #222;
+            color: #ddd;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        a:link, a:visited, a:hover, a:active {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <p style="display: inline;">🔀 Audit Trail</p>
+    <input type="text" name="daterange">
+    <div>
+        <table id="myTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ČAS ZMENY</th>
+                    <th>ZDROJ ZMENY</th>
+                    <th>CESTA PREMENNEJ</th>
+                    <th>STARÁ HODNOTA</th>
+                    <th>NOVÁ HODNOTA</th>
+                    <th>NÁZOV UŽÍVATEĽA</th>
+                    <th>ID UŽÍVATEĽA</th>
+                    <th>NÁZOV RECEPTÚRY</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+
+<script>
+    let table = null
+    let curStart = moment().startOf('day').format('YYYY-MM-DD')
+    let curEnd = moment().endOf('day').format('YYYY-MM-DD')
+
+    const formatTime = timeStr => timeStr ? timeStr.replace("Z", "").replace("T", " ").substring(0, timeStr.indexOf('.')) : timeStr
+
+    const addData = () => {
+        if (table) table.destroy()
+        const url = `/api/audit-trail?start=${curStart}&end=${curEnd}`
+        table = $('#myTable').DataTable({
+            ajax: {
+                url: url,
+                dataSrc: ''
+            },
+            order: [[0, 'desc']],
+            columns: [
+                { data: "id" },
+                { data: "sys_time", render: formatTime },
+                { data: "source" },
+                { data: "var_name" },
+                { data: "old_value" },
+                { data: "new_value" },
+                { data: "person_name" },
+                { data: "person_id" },
+                { data: "recipe_name" },
+            ],
+            pageLength: 100,
+        })
+    }
+
+    $(document).ready(function () {
+        addData()
+    })
+
+    $(function() {
+        $('input[name="daterange"]').daterangepicker({
+            startDate: moment().startOf('day'),
+            endDate: moment().endOf('day'),
+            showCustomRangeLabel: true,
+            showWeekNumbers: true
+        }, function(start, end, label) {
+            const formatedStart = start.format("YYYY-MM-DD")
+            const formatedEnd = end.format("YYYY-MM-DD")
+            curStart = formatedStart
+            curEnd = formatedEnd
+            addData()
+        });
+    });
+</script>
+</html>

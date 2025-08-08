@@ -1,0 +1,23 @@
+{
+  "name": "test_server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "better-sqlite3": "^11.2.1",
+    "express": "^4.19.2",
+    "json-diff": "^1.0.6",
+    "mssql": "^11.0.1",
+    "node-opcua": "^2.140.0",
+    "pino": "^9.4.0",
+    "pino-abstract-transport": "^2.0.0",
+    "pino-pretty": "^11.2.2"
+  }
+}

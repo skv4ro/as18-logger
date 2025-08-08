@@ -1,0 +1,169 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/daterangepicker.css" />
+
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <script src="/js/datatables.min.js"></script>
+
+    <title>🗿 Dummy diely</title>
+    <style>
+        html {
+            background-color: #222;
+            color: #ddd;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        a:link, a:visited, a:hover, a:active {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <p style="display: inline;">🗿 Dummy diely</p>
+    <input type="text" name="daterange">
+    <div>
+        <table id="myTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>SYS TIME</th>
+                    <th>DIEL NALOZENY DO PRIP.</th>
+                    <th>STATUS DIELU</th>
+                    <th>KONT. PO LIS. STATUS</th>
+                    <th>KONT. PO LIS. ROVNOST ZALIS</th>
+                    <th>KONT. PO LIS. MERANIE VYSKY</th>
+                    <th>KONT. PO LIS. POS ADJUST</th>
+                    <th>KONT. PO LIS. ROVNOST ZALIS 1</th>
+                    <th>KONT. PO LIS. ROVNOST ZALIS 2</th>
+                    <th>KONT. PO LIS. ROVNOST ZALIS 3</th>
+                    <th>KONT. PO LIS. ROVNOST ZALIS 4</th>
+                    <th>KONT. PO LIS. MERANIE VYSKY HOD</th>
+                    <th>KONT. PO LIS. DATETIME</th>
+                    <th>ROL. POZ. STATUS</th>
+                    <th>ROL. POZ. HODNOTA PRITL PIES</th>
+                    <th>ROL. POZ. DATETIME</th>
+                    <th>KONT. PO ROL. STATUS</th>
+                    <th>KONT. PO ROL. GM ORIENTACIA PLOCHA</th>
+                    <th>KONT. PO ROL. GM KRIVOST MIN</th>
+                    <th>KONT. PO ROL. GM KRIVOST MAX</th>
+                    <th>KONT. PO ROL. GM KRIVOST PRIEM</th>
+                    <th>KONT. PO ROL. PRIEM VONKAJSI</th>
+                    <th>KONT. PO ROL. PRIEM VNUTORNY</th>
+                    <th>KONT. PO ROL. VADA PLOCHA POCET VAD</th>
+                    <th>KONT. PO ROL. VADA KRUZ CELK VELKOST</th>
+                    <th>KONT. PO ROL. VADA KRUZ CELK SIRKA</th>
+                    <th>KONT. PO ROL. VADA KRUZ POCET VAD</th>
+                    <th>KONT. PO ROL. VADA PLOCHA CELK PLOCHA VAD</th>
+                    <th>KONT. PO ROL. VYSKA PLATNICKY</th>
+                    <th>KONT. PO ROL. VYSKA ZAROLOVANIA</th>
+                    <th>KONT. PO ROL. STATUS GM ORIENTACIA</th>
+                    <th>KONT. PO ROL. STATUS GM KRIVOST</th>
+                    <th>KONT. PO ROL. STATUS PRIEM VONKAJSI</th>
+                    <th>KONT. PO ROL. STATUS PRIEM VNUTORNY</th>
+                    <th>KONT. PO ROL. STATUS VADA KRUZ</th>
+                    <th>KONT. PO ROL. STATUS VADA PLOCHA PRASK</th>
+                    <th>KONT. PO ROL. STATUS VYSKA PLATNICKY</th>
+                    <th>KONT. PO ROL. STATUS VYSKA ZAROLOVANIA</th>
+                    <th>KONT. PO ROL. DATETIME</th>
+                    <th>KONT. KODU STATUS</th>
+                    <th>KONT. KODU NACITANY KOD</th>
+                    <th>KONT. KODU DATETIME</th>
+                    <th>KONT. KODU GRADE</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+
+<script>
+    let table = null
+    let curStart = moment().startOf('day').format('YYYY-MM-DD')
+    let curEnd = moment().endOf('day').format('YYYY-MM-DD')
+
+    const formatTime = timeStr => timeStr ? timeStr.replace("Z", "").replace("T", " ").substring(0, timeStr.indexOf('.')) : timeStr
+
+    const addData = () => {
+        if (table) table.destroy()
+        const url = `/api/dummy_diely?start=${curStart}&end=${curEnd}`
+        table = $('#myTable').DataTable({
+            ajax: {
+                url: url,
+                dataSrc: ''
+            },
+            order: [[0, 'desc']],
+            columns: [
+                { data: "id" },
+                { data: "sys_time", render: formatTime },
+                { data: "diel_nalozeny_do_prip" },
+                { data: "status_dielu" },
+                { data: "kont_lis_status" },
+                { data: "kont_lis_rovnost_zalis" },
+                { data: "kont_lis_meranie_vysky" },
+                { data: "kont_lis_pos_adjust" },
+                { data: "kont_lis_rovnost_zalis_1" },
+                { data: "kont_lis_rovnost_zalis_2" },
+                { data: "kont_lis_rovnost_zalis_3" },
+                { data: "kont_lis_rovnost_zalis_4" },
+                { data: "kont_lis_meranie_vysky_hod" },
+                { data: "kont_lis_datetime", render: formatTime },
+                { data: "rol_poz_status" },
+                { data: "rol_poz_hodnota_pritl_piest" },
+                { data: "rol_poz_datetime", render: formatTime },
+                { data: "kont_rol_status" },
+                { data: "kont_rol_gm_orientacia_plocha" },
+                { data: "kont_rol_gm_krivost_min" },
+                { data: "kont_rol_gm_krivost_max" },
+                { data: "kont_rol_gm_krivost_priem" },
+                { data: "kont_rol_priem_vonkajsi" },
+                { data: "kont_rol_priem_vnutorny" },
+                { data: "kont_rol_vada_plocha_pocet_vad" },
+                { data: "kont_rol_vada_kruz_celk_velkost" },
+                { data: "kont_rol_vada_kruz_celk_sirka" },
+                { data: "kont_rol_vada_kruz_pocet_vad" },
+                { data: "kont_rol_vada_plocha_celk_plocha_vad" },
+                { data: "kont_rol_vyska_platnicky" },
+                { data: "kont_rol_vyska_zarolovania" },
+                { data: "kont_rol_status_gm_orientacia" },
+                { data: "kont_rol_status_gm_krivost" },
+                { data: "kont_rol_status_priem_vonkajsi" },
+                { data: "kont_rol_status_priem_vnutorny" },
+                { data: "kont_rol_status_vada_kruz" },
+                { data: "kont_rol_status_vada_plocha_prask" },
+                { data: "kont_rol_status_vyska_platnicky" },
+                { data: "kont_rol_status_vyska_zarolovania" },
+                { data: "kont_rol_datetime", render: formatTime },
+                { data: "kont_kodu_status" },
+                { data: "kont_kodu_nacitany_kod" },
+                { data: "kont_kodu_datetime", render: formatTime },
+                { data: "kont_kodu_grade" }
+            ],
+            pageLength: 100,
+        })
+    }
+
+    $(document).ready(function () {
+        addData()
+    })
+
+    $(function() {
+        $('input[name="daterange"]').daterangepicker({
+            startDate: moment().startOf('day'),
+            endDate: moment().endOf('day'),
+            showCustomRangeLabel: true,
+            showWeekNumbers: true
+        }, function(start, end, label) {
+            const formatedStart = start.format("YYYY-MM-DD")
+            const formatedEnd = end.format("YYYY-MM-DD")
+            curStart = formatedStart
+            curEnd = formatedEnd
+            addData()
+        });
+    });
+</script>
+</html>

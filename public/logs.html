@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/daterangepicker.css" />
+
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <script src="/js/datatables.min.js"></script>
+
+    <title>📝 Systemove logy AS15 - MMA TopMount</title>
+    <style>
+        html {
+            background-color: #222;
+            color: #ddd;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        a:link, a:visited, a:hover, a:active {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <p style="display: inline;">📝 Systemove logy AS15 - MMA TopMount</p>
+    <input type="text" name="daterange">
+    <div>
+        <table id="myTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>LEVEL</th>
+                    <th>TIME</th>
+                    <th>PID</th>
+                    <th>HOSTNAME</th>
+                    <th>MSG</th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+    </div>
+
+<script>
+    const resolveLevel = levelNum => {
+        const hidden = `<span style="display: none">${levelNum}</span>`
+        if (levelNum === 10) return hidden + "<span style='color: gray'>TRACE<span>"
+        if (levelNum === 20) return hidden + "<span style='color: dodgerblue'>DEBUG<span>"
+        if (levelNum === 30) return hidden + "<span style='color: mediumseagreen'>INFO<span>"
+        if (levelNum === 40) return hidden + "<span style='color: orange'>WARN<span>"
+        if (levelNum === 50) return hidden + "<span style='color: tomato'>ERROR<span>"
+        if (levelNum === 60) return hidden + "<span style='color: red'>FATAL<span>"
+        return "UNKNOWN"
+    }
+
+    let table = null
+    let curStart = moment().startOf('day').format('YYYY-MM-DD')
+    let curStop = moment().endOf('day').format('YYYY-MM-DD')
+
+    const addData = (range) => {
+        if (table) table.destroy()
+        const url = `/api/logs?start=${curStart}&end=${curStop}`
+        table = $('#myTable').DataTable({
+            ajax: {
+                url: url,
+                dataSrc: ''
+            },
+            order: [[0, 'desc']],
+            columns: [
+                { data: "id"},
+                { data: "level", render: resolveLevel },
+                { data: "time"},
+                { data: "pid"},
+                { data: "hostname"},
+                { data: "msg"},
+            ],
+            pageLength: 100,
+        })
+    }
+
+    $(document).ready(function () {
+        addData()
+    })
+
+    $(function() {
+        $('input[name="daterange"]').daterangepicker({
+            startDate: moment().startOf('day'),
+            endDate: moment().endOf('day'),
+            showCustomRangeLabel: true,
+            showWeekNumbers: true
+        }, function(start, end, label) {
+            curStart = start.format("YYYY-MM-DD")
+            curStop = end.format("YYYY-MM-DD")
+            addData()
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,1 @@
+call pm2 stop pm2.config.cjs

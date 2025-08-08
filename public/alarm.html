@@ -1,0 +1,77 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/daterangepicker.css" />
+
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <script src="/js/datatables.min.js"></script>
+
+    <title>Document</title>
+    <style>
+        html {
+            background-color: #222;
+            color: #ddd;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <p>Chybova hlaska: <span id="alarmText" style="color: orange;"></span> <span id="dateRange"></span></p>
+    <div>
+        <table id="myTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>SYSTEM TIME</th>
+                    <th>STATE</th>
+                    <th>TIME STAMP</th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+    </div>
+
+<script>
+    
+    const queryStr = window.location.search
+    const urlParams = new URLSearchParams(queryStr)
+
+    const alarmText = urlParams.get("alarm_text")
+    const start = urlParams.get("start")
+    const end = urlParams.get("end")
+
+    let table = null
+
+    const addData = () => {
+        const params = new URLSearchParams({alarm_text: alarmText, start: start, end: end})
+        const url = `/api/alarm?${params.toString()}`
+        table = $('#myTable').DataTable({
+            ajax: {
+                url: url,
+                dataSrc: ''
+            },
+            order: [[0, 'desc']],
+            columns: [
+                { data: "id" },
+                { data: "sys_time" },
+                { data: "state" },
+                { data: "time_stamp" }
+            ],
+            pageLength: 100
+        })
+    }
+
+    $(document).ready(function () {
+        addData()
+    })
+
+    $('#alarmText').text(alarmText)
+    $('#dateRange').text(`${start} -> ${end}`)
+</script>
+</html>
