@@ -125,6 +125,8 @@ export const encodeDT = date => {
     ];
 }
 
+export const dtToISO = dt => formatToISODateString(decodeDT(dt))
+
 export const insertSQL = (tableName, names, values) => {
     const request = new mssql.Request()
     for (let i = 0; i < names.length; i++) {

@@ -1,4 +1,4 @@
-import { SQL_CONFIG, OPC_ALARMY_SQL, OPC_DATA_DIELU_SQL, OPC_KONTROLA_PALETKY, OPC_DUMMY_DIELY, OPC_AUDIT_TRAIL } from "./config.js"
+import { SQL_CONFIG, OPC_ALARMY_SQL, OPC_DATA_DIELU_SQL, OPC_AUDIT_TRAIL } from "./config.js"
 import mssql from "mssql"
 import readline from "node:readline"
 import chalk from "chalk"
@@ -6,8 +6,6 @@ import chalk from "chalk"
 const tables = [
     { name: OPC_ALARMY_SQL.tableName, sql: OPC_ALARMY_SQL },
     { name: OPC_DATA_DIELU_SQL.tableName, sql: OPC_DATA_DIELU_SQL },
-    { name: OPC_KONTROLA_PALETKY.tableName, sql: OPC_KONTROLA_PALETKY },
-    { name: OPC_DUMMY_DIELY.tableName, sql: OPC_DUMMY_DIELY },
     { name: OPC_AUDIT_TRAIL.tableName, sql: OPC_AUDIT_TRAIL }
 ]
 
