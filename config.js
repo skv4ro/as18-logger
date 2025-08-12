@@ -70,7 +70,7 @@ const lisStructCols = prefix => {
         { name: "nastavena_lisovacia_sila_max", datatype: mssql.Decimal(10, 3) },
         { name: "nastaveny_cas_vydrze_na_tlaku", datatype: mssql.Int },
         { name: "dosiahnuta_sila_lisovacia", datatype: mssql.Decimal(10, 3) },
-        { name: "dosiahnuta_poz_lisovania", datatype: mssql.Decimal(10, 3) },
+        { name: "dosiahnuta_poz_lisovacia", datatype: mssql.Decimal(10, 3) },
         { name: "dosiahnuta_sila_na_zaciatku_lis", datatype: mssql.Decimal(10, 3) },
         { name: "dosiahnuta_sila_na_zaciatku_lis_pozicia", datatype: mssql.Decimal(10, 3) },
         { name: "dosiahnuta_max_sila_pocas_lis", datatype: mssql.Decimal(10, 3), },
@@ -125,6 +125,7 @@ export const OPC_DATA_DIELU_SQL = {
         { name: "status_dielu", datatype: mssql.Int },
         { name: "doplnkovy_status", datatype: mssql.Int },
         { name: "status_pre_robot", datatype: mssql.Int },
+        { name: "status_dielu_pre_databazu", datatype: mssql.NVarChar(40) },
         ...(lisStructCols)("lis1"),
         ...(lisStructCols)("lis2"),
         { name: "laser_status", datatype: mssql.Int },
@@ -153,6 +154,7 @@ const opcDataDieluOnData = (res, env) => {
     values.push(value.statusDielu)
     values.push(value.doplnkovyStatusDielu)
     values.push(value.statusPreRobot)
+    values.push(value.stautDieluPreDatabazu)
     values.push(...lisStructVals(value.lis1))
     values.push(...lisStructVals(value.lis2))
     values.push(value.laser.status)
@@ -302,14 +304,24 @@ export const OPC = {
             name: "Alarmy", // nazov instancie (pre prehlad v logoch aplikacie)
             watchNodeId: 'ns=3;s="UlozeneAlarmy"."statusUloz"', // aky tag v plc ma sledovat ci su nove data 
             readNode: { nodeId: 'ns=3;s="UlozeneAlarmy"."PreSQL"."alarm"', attribudeId: AttributeIds.Value }, // aky tag/strukturu ma citat ked su nove data
-            sql: OPC_ALARMY_SQL, // sql schema
             onData: opcAlarmyOnData // funkcia pre spracovanie ked su nove data
         },
         {
-            name: "Data dielu",
-            watchNodeId: 'ns=3;s="DataDielyStol"."StatusUlozenia"',
-            readNode: { nodeId: 'ns=3;s="DataDielyStol"."Databaza"', attribudeId: AttributeIds.Value },
-            sql: OPC_DATA_DIELU_SQL,
+            name: "Data dielu Lis 1",
+            watchNodeId: 'ns=3;s="DataDielov"."StatusUlozeniaLis1"',
+            readNode: { nodeId: 'ns=3;s="DataDielov"."Lis1"', attribudeId: AttributeIds.Value },
+            onData: opcDataDieluOnData
+        },
+        {
+            name: "Data dielu Lis 2",
+            watchNodeId: 'ns=3;s="DataDielov"."StatusUlozeniaLis2"',
+            readNode: { nodeId: 'ns=3;s="DataDielov"."Lis2"', attribudeId: AttributeIds.Value },
+            onData: opcDataDieluOnData
+        },
+        {
+            name: "Data dielu Robot",
+            watchNodeId: 'ns=3;s="DataDielov"."StatusUlozeniaRobot"',
+            readNode: { nodeId: 'ns=3;s="DataDielov"."RobotDatabaza"', attribudeId: AttributeIds.Value },
             onData: opcDataDieluOnData
         },
         // {
