@@ -2,7 +2,7 @@ import Database from "better-sqlite3"
 import express from "express"
 import mssql from "mssql"
 import path from "path"
-import { WEB as CONFIG_WEB, SQL_CONFIG, OPC_ALARMY_SQL, OPC as CONFIG_OPC, OPC_DATA_DIELU_SQL, LOGGER_CONFIG, OPC_KONTROLA_PALETKY, OPC_DUMMY_DIELY, OPC_AUDIT_TRAIL } from "./config.js"
+import { WEB as CONFIG_WEB, SQL_CONFIG, OPC_ALARMY_SQL, OPC as CONFIG_OPC, OPC_DATA_DIELU_SQL, LOGGER_CONFIG, OPC_AUDIT_TRAIL } from "./config.js"
 import { fileURLToPath } from "url"
 import { formatToISODateString } from "./util.js"
 
@@ -34,8 +34,6 @@ const readLogs = (start, end) => {
 
 const readAlarms= async (start, end) => {
     const pool = await mssql.connect(SQL_CONFIG)
-    start.setHours(0,0,0,0)
-    end.setHours(23,59,59,999)
     const sqlReq = pool.request()
     sqlReq.input("start", formatToISODateString(start))
     sqlReq.input("end", formatToISODateString(end))
@@ -56,8 +54,6 @@ const readAlarms= async (start, end) => {
 
 const readAlarmData = async (start, end, alarmText) => {
     const pool = await mssql.connect(SQL_CONFIG)
-    start.setHours(0,0,0,0)
-    end.setHours(23,59,59,999)
     const sqlReq = pool.request()
     sqlReq.input("start", formatToISODateString(start))
     sqlReq.input("end", formatToISODateString(end))
@@ -78,8 +74,6 @@ const readAlarmData = async (start, end, alarmText) => {
 
 const readTableData = async (tableName, start, end) => {
     const pool = await mssql.connect(CONFIG_OPC.sqlConfig)
-    start.setHours(0,0,0,0)
-    end.setHours(23,59,59,999)
     const sqlReq = pool.request()
     sqlReq.input("start", formatToISODateString(start))
     sqlReq.input("end", formatToISODateString(end))
@@ -114,10 +108,28 @@ const makeCsv = recordset => {
 app.use(express.static("public"))
 app.use(express.json())
 
+app.get("/api/columns/:tableName", (req, res) => {
+    const tableName = req.params.tableName
+    const columns = []
+
+    if (tableName === OPC_DATA_DIELU_SQL.tableName) columns.push(
+        ...OPC_DATA_DIELU_SQL.columns.map(col => {
+            if (col.datatype === mssql.DateTime2) return { data: col.name, render: "formatTime" }
+            return { data: col.name }
+        })
+    )
+
+    res.send(JSON.stringify(columns))
+})
+
 app.get("/api/:route", async (req, res) => {
     const route = req.params.route
-    const start = req.query.start ? new Date(req.query.start) : new Date()
-    const end = req.query.end ? new Date(req.query.end) : new Date()
+    const dayStart = new Date()
+    const dayEnd = new Date()
+    dayStart.setHours(0,0,0,0)
+    dayEnd.setHours(23,59,59,999)
+    const start = req.query.start ? new Date(req.query.start) : dayStart
+    const end = req.query.end ? new Date(req.query.end) : dayEnd
     try {
         if (route === "logs") {
             const rows = readLogs(start, end)
@@ -143,20 +155,8 @@ app.get("/api/:route", async (req, res) => {
             return
         }
 
-        if (route === "kontrola-paletky") {
-            const sqlRes = await readTableData(OPC_KONTROLA_PALETKY.tableName, start, end)
-            res.send(sqlRes.recordset)
-            return
-        }
-
         if (route === "data-dielu") {
             const sqlRes = await readTableData(OPC_DATA_DIELU_SQL.tableName, start, end)
-            res.send(sqlRes.recordset)
-            return
-        }
-
-        if (route === "dummy_diely") {
-            const sqlRes = await readTableData(OPC_DUMMY_DIELY.tableName, start, end)
             res.send(sqlRes.recordset)
             return
         }

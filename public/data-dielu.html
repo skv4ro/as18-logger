@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/css/datatables.min.css">
     <script src="/js/datatables.min.js"></script>
 
-    <title>📊 Dáta dielu</title>
+    <title>📊 Dáta dielu AS18 - Montážna linka Stellantis</title>
     <style>
         html {
             background-color: #222;
@@ -25,275 +25,60 @@
     </style>
 </head>
 <body>
-    <p style="display: inline;">📊 Dáta dielu</p>
+    <p style="display: inline;">📊 Dáta dielu AS18 - Montážna linka Stellantis</p>
     <input type="text" name="daterange">
     <a href="api/download-csv" download="export.csv" id="dcsv">Download CSV</a>
-    <div>
+    <main>
         <table id="myTable" class="nowrap">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>SYS TIME</th>
-                    <th>ID DIELU</th>
-                    <th>DIEL NALOZENY DO PRIP.</th>
-                    <th>STATUS DIELU</th>
-                    <th>DOPLNKOVY STATUS</th>
-                    <th>CISLO PALETKY DOPR.</th>
-                    <th>CISLO POZICIE STOLA</th>
-                    <th>CISLO ZAKAZKY</th>
-                    <th>CISLO DIELU</th>
-                    <th>MILNIK ZAKAZKA</th>
-                    <th>PORADIE</th>
-                    <th>HOUSING CISLO DIELU</th>
-                    <th>HOUSING SARZA</th>
-                    <th>HOUSING WE DOKLADU</th>
-                    <th>GUMOKOV CISLO DIELU</th>
-                    <th>GUMOKOV SARZA</th>
-                    <th>GUMOKOV MILNIK</th>
-                    <th>GUMOKOV VYROBNA ZAKAZKA</th>
-                    <th>PLATNICKA CISLO DIELU</th>
-                    <th>PLATNICKA SARZA</th>
-                    <th>PLATNICKA WE DOKLADU</th>
-                    <th>SKRUTKY CISLO DIELU</th>
-                    <th>SKRUTKY SARZA</th>
-                    <th>SKRUTKY WE DOKLADU</th>
-                    <th>KONT. DOPR. CISLO PALETY</th>
-                    <th>KONT. DOPR. A PRESTREK HODNOTA</th>
-                    <th>KONT. DOPR. A ORIENTACIA HODNOTA</th>
-                    <th>KONT. DOPR. A ORIENTACIA STRING</th>
-                    <th>KONT. DOPR. B PRESTREK HODNOTA</th>
-                    <th>KONT. DOPR. B ORIENTACIA HODNOTA</th>
-                    <th>KONT. DOPR. B ORIENTACIA STRING</th>
-                    <th>KONT. DOPR. STATUS PRESTREK</th>
-                    <th>KONT. DOPR. STATUS ORIENTACIA</th>
-                    <th>KONT. DOPR. DATETIME</th>
-                    <th>LIS VKLADANIE STATUS</th>
-                    <th>LIS VKLADANIE SILA</th>
-                    <th>LIS VKLADANIE POZICIA</th>
-                    <th>LIS VKLADANIE MAX SILA</th>
-                    <th>LIS VKLADANIE MIN SILA</th>
-                    <th>LIS VKLADANIE MAX POZICIA</th>
-                    <th>LIS VKLADANIE MIN POZICIA</th>
-                    <th>LIS VKLADANIE DATETIME</th>
-                    <th>KONT. PO LIS. STATUS</th>
-                    <th>KONT. PO LIS. ROVNOST ZALIS</th>
-                    <th>KONT. PO LIS. MERANIE VYSKY</th>
-                    <th>KONT. PO LIS. POS ADJUST</th>
-                    <th>KONT. PO LIS. ROVNOST ZALIS 1</th>
-                    <th>KONT. PO LIS. ROVNOST ZALIS 2</th>
-                    <th>KONT. PO LIS. ROVNOST ZALIS 3</th>
-                    <th>KONT. PO LIS. ROVNOST ZALIS 4</th>
-                    <th>KONT. PO LIS. MERANIE VYSKY HOD</th>
-                    <th>KONT. PO LIS. DATETIME</th>
-                    <th>NAKL. PLAT. STATUS</th>
-                    <th>NAKL. PLAT. HODNOTA ZDVIH</th>
-                    <th>NAKL. PLAT. DATETIME</th>
-                    <th>ROL. POZ. STATUS</th>
-                    <th>ROL. POZ. SILA</th>
-                    <th>ROL. POZ. POZICIA</th>
-                    <th>ROL. POZ. HODNOTA PRITL PIES</th>
-                    <th>ROL. POZ. OTACKY VRETENA</th>
-                    <th>ROL. POZ. POSUV PRI ROLOVANI</th>
-                    <th>ROL. POZ. SILA MAX</th>
-                    <th>ROL. POZ. SILA MIN</th>
-                    <th>ROL. POZ. POZICIA MAX</th>
-                    <th>ROL. POZ. POZICIA MIN</th>
-                    <th>ROL. POZ. INTERVAL MAZANIA</th>
-                    <th>ROL. POZ. CAS MAZANIA</th>
-                    <th>ROL. POZ. AKTUALNY CYKLUS</th>
-                    <th>ROL. POZ. MAZANIE VYKONANE</th>
-                    <th>ROL. POZ. DATETIME</th>
-                    <th>CIS. PO ROL. STATUS</th>
-                    <th>CIS. PO ROL. DATETIME</th>
-                    <th>KONT. PO ROL. STATUS</th>
-                    <th>KONT. PO ROL. GM ORIENTACIA PLOCHA</th>
-                    <th>KONT. PO ROL. GM KRIVOST MIN</th>
-                    <th>KONT. PO ROL. GM KRIVOST MAX</th>
-                    <th>KONT. PO ROL. GM KRIVOST PRIEM</th>
-                    <th>KONT. PO ROL. PRIEM VONKAJSI</th>
-                    <th>KONT. PO ROL. PRIEM VNUTORNY</th>
-                    <th>KONT. PO ROL. VADA PLOCHA POCET VAD</th>
-                    <th>KONT. PO ROL. VADA KRUZ CELK VELKOST</th>
-                    <th>KONT. PO ROL. VADA KRUZ CELK SIRKA</th>
-                    <th>KONT. PO ROL. VADA KRUZ POCET VAD</th>
-                    <th>KONT. PO ROL. VADA PLOCHA CELK PLOCHA VAD</th>
-                    <th>KONT. PO ROL. VYSKA PLATNICKY</th>
-                    <th>KONT. PO ROL. VYSKA ZAROLOVANIA</th>
-                    <th>KONT. PO ROL. VYSKA GM</th>
-                    <th>KONT. PO ROL. STATUS GM ORIENTACIA</th>
-                    <th>KONT. PO ROL. STATUS GM KRIVOST</th>
-                    <th>KONT. PO ROL. STATUS PRIEM VONKAJSI</th>
-                    <th>KONT. PO ROL. STATUS PRIEM VNUTORNY</th>
-                    <th>KONT. PO ROL. STATUS VADA KRUZ</th>
-                    <th>KONT. PO ROL. STATUS VADA PLOCHA PRASK</th>
-                    <th>KONT. PO ROL. STATUS VYSKA PLATNICKY</th>
-                    <th>KONT. PO ROL. STATUS VYSKA ZAROLOVANIA</th>
-                    <th>KONT. PO ROL. STATUS VYSKA GM</th>
-                    <th>KONT. PO ROL. DATETIME</th>
-                    <th>NAKL. SKRUT. STATUS</th>
-                    <th>NAKL. SKRUT. CAS NALOZENIA SKRUTIEK</th>
-                    <th>LIS. SKRUT. STATUS</th>
-                    <th>LIS. SKRUT. DATETIME</th>
-                    <th>LIS. SKRUT. SILA</th>
-                    <th>LIS. SKRUT. POZICIA</th>
-                    <th>LIS. SKRUT. TLAK HYDRAULIKA</th>
-                    <th>LIS. SKRUT. TLAK VZDUCHU</th>
-                    <th>KONT. PO. LIS. SKTRUT. STATUS</th>
-                    <th>KONT. PO. LIS. SKTRUT. DATETIME</th>
-                    <th>ODOBER. POZ. STATUS</th>
-                    <th>ODOBER. POZ. DATETIME</th>
-                    <th>LASER. POZ. STATUS</th>
-                    <th>LASER. POZ. DATETIME</th>
-                    <th>KONT. KODU STATUS</th>
-                    <th>KONT. KODU NACITANY KOD</th>
-                    <th>KONT. KODU DATETIME</th>
-                    <th>KONT. KODU GRADE</th>
-                </tr>
+                <tr id="tableHeadRow"></tr>
             </thead>
         </table>
-    </div>
+    </main>
 </body>
 
 <script>
+    const format = "YYYY-MM-DDTHH:mm:ss"
     let table = null
-    let curStart = moment().startOf('day').format('YYYY-MM-DD')
-    let curEnd = moment().endOf('day').format('YYYY-MM-DD')
+    let curStart = moment().startOf('day').format(format)
+    let curEnd = moment().endOf('day').format(format)
+    let columns = []
 
     const formatTime = timeStr => timeStr ? timeStr.replace("Z", "").replace("T", " ").substring(0, timeStr.indexOf('.')) : timeStr
 
     const addData = () => {
+        const href = encodeURI(`api/download-csv?start=${curStart}&end=${curEnd}`)
+        const dcsv = $('#dcsv') 
+        dcsv.attr('href', href)
+        dcsv.attr("download", `as18_export_${curStart.replaceAll(":", ".")}_${curStart.replaceAll(":", ".")}.csv`)
+
         if (table) table.destroy()
-        const url = `/api/data-dielu?start=${curStart}&end=${curEnd}`
+        const url = encodeURI(`/api/data-dielu?start=${curStart}&end=${curEnd}`)
         table = $('#myTable').DataTable({
             ajax: {
                 url: url,
                 dataSrc: ''
             },
             order: [[0, 'desc']],
-            columns: [
-                { data: "id" },
-                { data: "sys_time", render: formatTime },
-                { data: "id_dielu" },
-                { data: "diel_nalozeny_do_prip" },
-                { data: "status_dielu" },
-                { data: "doplnkovy_status" },
-                { data: "cislo_paletky_dopr" },
-                { data: "cislo_pozicie_stol" },
-                { data: "cislo_zakazky" },
-                { data: "cislo_dielu" },
-                { data: "milnik_zakazka" },
-                { data: "poradie" },
-                { data: "housing_cislo_dielu" },
-                { data: "housing_sarza" },
-                { data: "housing_we_dokladu" },
-                { data: "gumokov_cislo_dielu" },
-                { data: "gumokov_sarza" },
-                { data: "gumokov_milnik" },
-                { data: "gumokov_vyr_zakazka" },
-                { data: "platnicka_cislo_dielu" },
-                { data: "platnicka_sarza" },
-                { data: "platnicka_we_dokladu" },
-                { data: "skrutky_cislo_dielu" },
-                { data: "skrutky_sarza" },
-                { data: "skrutky_we_dokladu" },
-                { data: "kont_dopr_cislo_palety" },
-                { data: "kont_dopr_a_prestrek_hodnota" },
-                { data: "kont_dopr_a_orientacia_hodnota" },
-                { data: "kont_dopr_a_orientacia_string" },
-                { data: "kont_dopr_b_prestrek_hodnota" },
-                { data: "kont_dopr_b_orientacia_hodnota" },
-                { data: "kont_dopr_b_orientacia_string" },
-                { data: "kont_dopr_status_prestrek" },
-                { data: "kont_dopr_status_orientacia" },
-                { data: "kont_dopr_datetime", render: formatTime },
-                { data: "lis_vklad_status" },
-                { data: "lis_vklad_sila" },
-                { data: "lis_vklad_pozicia" },
-                { data: "lis_vklad_max_sila" },
-                { data: "lis_vklad_min_sila" },
-                { data: "lis_vklad_max_pozicia" },
-                { data: "lis_vklad_min_pozicia" },
-                { data: "lis_vklad_datetime", render: formatTime },
-                { data: "kont_lis_status" },
-                { data: "kont_lis_rovnost_zalis" },
-                { data: "kont_lis_meranie_vysky" },
-                { data: "kont_lis_pos_adjust" },
-                { data: "kont_lis_rovnost_zalis_1" },
-                { data: "kont_lis_rovnost_zalis_2" },
-                { data: "kont_lis_rovnost_zalis_3" },
-                { data: "kont_lis_rovnost_zalis_4" },
-                { data: "kont_lis_meranie_vysky_hod" },
-                { data: "kont_lis_datetime", render: formatTime },
-                { data: "nakl_plat_status" },
-                { data: "nakl_plat_hodnota_zdvih" },
-                { data: "nakl_plat_datetime", render: formatTime },
-                { data: "rol_poz_status" },
-                { data: "rol_poz_sila" },
-                { data: "rol_poz_pozicia" },
-                { data: "rol_poz_hodnota_pritl_piest" },
-                { data: "rol_poz_otacky_vretena" },
-                { data: "rol_poz_posuv_pri_rolovani" },
-                { data: "rol_poz_sila_max" },
-                { data: "rol_poz_sila_min" },
-                { data: "rol_poz_pozicia_max" },
-                { data: "rol_poz_pozicia_min" },
-                { data: "rol_poz_interval_mazania" },
-                { data: "rol_poz_cas_mazania" },
-                { data: "rol_poz_aktualny_cyklus" },
-                { data: "rol_poz_mazanie_vykonane" },
-                { data: "rol_poz_datetime", render: formatTime },
-                { data: "cist_rol_status" },
-                { data: "cist_rol_datetime", render: formatTime },
-                { data: "kont_rol_status" },
-                { data: "kont_rol_gm_orientacia_plocha" },
-                { data: "kont_rol_gm_krivost_min" },
-                { data: "kont_rol_gm_krivost_max" },
-                { data: "kont_rol_gm_krivost_priem" },
-                { data: "kont_rol_priem_vonkajsi" },
-                { data: "kont_rol_priem_vnutorny" },
-                { data: "kont_rol_vada_plocha_pocet_vad" },
-                { data: "kont_rol_vada_kruz_celk_velkost" },
-                { data: "kont_rol_vada_kruz_celk_sirka" },
-                { data: "kont_rol_vada_kruz_pocet_vad" },
-                { data: "kont_rol_vada_plocha_celk_plocha_vad" },
-                { data: "kont_rol_vyska_platnicky" },
-                { data: "kont_rol_vyska_zarolovania" },
-                { data: "kont_rol_vyska_gm" },
-                { data: "kont_rol_status_gm_orientacia" },
-                { data: "kont_rol_status_gm_krivost" },
-                { data: "kont_rol_status_priem_vonkajsi" },
-                { data: "kont_rol_status_priem_vnutorny" },
-                { data: "kont_rol_status_vada_kruz" },
-                { data: "kont_rol_status_vada_plocha_prask" },
-                { data: "kont_rol_status_vyska_platnicky" },
-                { data: "kont_rol_status_vyska_zarolovania" },
-                { data: "kont_rol_status_vyska_gm" },
-                { data: "kont_rol_datetime", render: formatTime },
-                { data: "nakl_skrut_status" },
-                { data: "nakl_skrut_cas_nalozenia_skrutiek", render: formatTime },
-                { data: "lis_skrut_status" },
-                { data: "lis_skrut_datetime", render: formatTime },
-                { data: "lis_skrut_sila" },
-                { data: "lis_skrut_pozicia" },
-                { data: "lis_skrut_tlak_hydraulika" },
-                { data: "lis_skrut_tlak_vzduchu" },
-                { data: "kont_skrut_status" },
-                { data: "kont_skrut_datetime", render: formatTime },
-                { data: "odober_poz_status" },
-                { data: "odober_poz_datetime", render: formatTime },
-                { data: "laser_poz_status" },
-                { data: "laser_poz_datetime", render: formatTime },
-                { data: "kont_kodu_status" },
-                { data: "kont_kodu_nacitany_kod" },
-                { data: "kont_kodu_datetime", render: formatTime },
-                { data: "kont_kodu_grade" }
-            ],
+            columns: columns,
             pageLength: 100,
         })
     }
 
     $(document).ready(function () {
-        addData()
+        fetch("/api/columns/data_dielu")
+        .then(res => res.json())
+        .then(cols => {
+            const tr = document.getElementById("tableHeadRow")
+            for (const col of cols) {
+                const td = document.createElement("td")
+                td.textContent = col.data.replaceAll("_", " ").toUpperCase()
+                tr.appendChild(td)
+
+                columns.push({ data: col.data, render: col.render === "formatTime" ? formatTime : undefined })
+            }
+            addData()
+        })
     })
 
     $(function() {
@@ -301,16 +86,15 @@
             startDate: moment().startOf('day'),
             endDate: moment().endOf('day'),
             showCustomRangeLabel: true,
-            showWeekNumbers: true
+            showWeekNumbers: true,
+            timePicker: true,
+            timePickerIncrement: 15,
+            timePicker24Hour: true
         }, function(start, end, label) {
-            const formatedStart = start.format("YYYY-MM-DD")
-            const formatedEnd = end.format("YYYY-MM-DD")
+            const formatedStart = start.format(format)
+            const formatedEnd = end.format(format)
             curStart = formatedStart
             curEnd = formatedEnd
-            const href = `api/download-csv?start=${curStart}&end=${curEnd}`
-            const dcsv = $('#dcsv') 
-            dcsv.attr('href', href)
-            dcsv.attr("download", `export_${curStart}_${curStart}.csv`)
             addData()
         });
     });

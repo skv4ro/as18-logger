@@ -1,4 +1,4 @@
-#AS15 LOGGER 
+#AS18 LOGGER 
 aplikacia pre zber dat na linke Boge AS18 Montážna linka Stellantis
 zbieraju sa chybova hlasky (alarmy) a procesne data, ktore sa ukladaju do MS SQL databazy
 aplikacia je naprogramovana v JavaScript-e a bezi na platforme NodeJS

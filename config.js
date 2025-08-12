@@ -278,7 +278,7 @@ const opcAuditTrailVypinanieKontrolDMCGrade = (data, env) => {
 export const OPC = {
     appName: "avsys-opc-logger",
     resetDelay: 10000, // cas kolko ma aplikacia cakat na znovuspustenie pri chybe
-    opcEndpointURL: "opc.tcp://10.100.1.10:4840",
+    opcEndpointURL: "opc.tcp://10.101.1.10:4840",
     opcClientOptions: {
         applicationName: "avsys_opcua_logger",
         securityMode: MessageSecurityMode.None,
