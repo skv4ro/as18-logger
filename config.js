@@ -108,7 +108,6 @@ const lisStructVals = value => {
         dtToISO(value.lis.dateTimeZalisovania),
         value.nastroj.statusNastrojaGlobal,
         value.nastroj.statusNastrojaKontrSkrutkyLis2,
-        value.nastroj.dateTimeVlozeniaBracketu,
         dtToISO(value.nastroj.dateTimeVlozeniaBracketu),
         dtToISO(value.nastroj.dateTimeVlozeniaGM_adapter),
     ]
