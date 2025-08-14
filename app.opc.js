@@ -100,9 +100,17 @@ const initInstance = (session, instance) => {
 
     poller.on("error", err => {
         logger.error(`error on instance ${instanceName}: ${err.message}`)
+        if (instance.stopOnError) poller.stop()
         if (err.message.includes("BadConnectionClosed")) {
             logger.warn(`Error BadConnectionClosed, stopping poller ${instanceName}`)
             poller.stop()
+            logger.info(`poller of ${instanceName} will restart in  + ${RESET_DELAY}`)
+            setTimeout(() => {
+                poller.poll({
+                    pollingTime: instance.pollingTime ?? 1000,
+                    stopOnError: instance.stopOnError ?? false
+                }, RESET_DELAY)
+            })
         } 
     })
 
