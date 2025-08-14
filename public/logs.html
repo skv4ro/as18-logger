@@ -55,13 +55,14 @@
         return "UNKNOWN"
     }
 
+    const format = 'YYYY-MM-DDTHH:mm:ss'
     let table = null
-    let curStart = moment().startOf('day').format('YYYY-MM-DD')
-    let curStop = moment().endOf('day').format('YYYY-MM-DD')
+    let curStart = moment().startOf('day').format(format)
+    let curStop = moment().endOf('day').format(format)
 
     const addData = (range) => {
         if (table) table.destroy()
-        const url = `/api/logs?start=${curStart}&end=${curStop}`
+        const url = encodeURI(`/api/logs?start=${curStart}&end=${curStop}`)
         table = $('#myTable').DataTable({
             ajax: {
                 url: url,
@@ -91,8 +92,8 @@
             showCustomRangeLabel: true,
             showWeekNumbers: true
         }, function(start, end, label) {
-            curStart = start.format("YYYY-MM-DD")
-            curStop = end.format("YYYY-MM-DD")
+            curStart = start.format(format)
+            curStop = end.format(format)
             addData()
         });
     });

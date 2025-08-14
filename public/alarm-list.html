@@ -44,9 +44,10 @@
     </div>
 
 <script>
+    const format = 'YYYY-MM-DDTHH:mm:ss'
     let table = null
-    let curStart = moment().startOf('day').format('YYYY-MM-DD')
-    let curEnd = moment().endOf('day').format('YYYY-MM-DD')
+    let curStart = moment().startOf('day').format(format)
+    let curEnd = moment().endOf('day').format(format)
 
     const renderAlarmText = text => {
         const textEnc = encodeURIComponent(text)
@@ -57,7 +58,7 @@
 
     const addData = () => {
         if (table) table.destroy()
-        const url = `/api/alarm-list?start=${curStart}&end=${curEnd}`
+        const url = encodeURI(`/api/alarm-list?start=${curStart}&end=${curEnd}`)
         table = $('#myTable').DataTable({
             ajax: {
                 url: url,
@@ -87,8 +88,8 @@
             showCustomRangeLabel: true,
             showWeekNumbers: true
         }, function(start, end, label) {
-            const formatedStart = start.format("YYYY-MM-DD")
-            const formatedEnd = end.format("YYYY-MM-DD")
+            const formatedStart = start.format(format)
+            const formatedEnd = end.format(format)
             curStart = formatedStart
             curEnd = formatedEnd
             addData()
