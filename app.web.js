@@ -184,4 +184,4 @@ app.get("/:page", (req, res) => {
     res.sendFile(path.join(__dirname, 'public', `${page}.html`))
 })
 
-app.listen(CONFIG_WEB.port)
+app.listen(CONFIG_WEB.port, "0.0.0.0")
