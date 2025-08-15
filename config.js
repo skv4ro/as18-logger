@@ -153,7 +153,7 @@ const opcDataDieluOnData = (res, env) => {
     values.push(value.statusDielu)
     values.push(value.doplnkovyStatusDielu)
     values.push(value.statusPreRobot)
-    values.push(value.stautDieluPreDatabazu)
+    values.push(value.statusDieluPreDatabazu)
     values.push(...lisStructVals(value.lis1))
     values.push(...lisStructVals(value.lis2))
     values.push(value.laser.status)
