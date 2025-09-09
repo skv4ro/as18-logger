@@ -184,7 +184,7 @@ const saveToUSB = async (_, env) => {
         await fsp.writeFile(path, csvData)
         logger.debug("Data exported to removable drive " + removable.volumeName)
     } catch (e) {
-        logger.error("error on usb save" + e.message)
+        logger.error(`error on usb save ${e.message}`)
         const writeNode = createStringWriteNode('ns=3;s="Export_databazy_DB"."text_chyby"', e.message)
         await env.session.write(writeNode)
         return 3
