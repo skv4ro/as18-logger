@@ -1,6 +1,7 @@
 import crypro from "crypto"
 import pino from "pino"
 import mssql from "mssql"
+import { exec } from "child_process"
 import { DataType, AttributeIds, VariantArrayType } from "node-opcua"
 
 export const createLogger = (sqlitePath, level) => {
@@ -212,3 +213,46 @@ export const createBooleanWriteNode = (nodeId, value) => {
 }
 
 export const extractColumnNames = columns => columns.filter(col => !col.primaryKey).map(col => col.name)
+
+export const driveInfo = (driveType) => {
+    return new Promise((resolve, reject) => {
+        exec("wmic logicaldisk get DeviceID,DriveType,VolumeName", (err, stdout) => {
+            if (err) {
+                reject(err)
+                return
+            }
+
+            try {
+                const lines = stdout.trim().split("\n").slice(1) // preskočí hlavičku
+                const drives = lines
+                .map(line => line.trim().split(/\s+/)) // rozdeli podľa whitespace
+                .map(parts => ({
+                    deviceID: parts[0], // napr. "C:"
+                    driveType: parseInt(parts[1]), // napr. 2
+                    volumeName: parts[2] || "" // môže byť prázdne
+                }))
+                const result = driveType ? drives.filter(drive => drive.driveType === driveType) : drives
+                resolve(result)
+            } catch (e) {
+                reject(e)
+            }
+        })
+    })
+}
+
+export const makeCsv = recordset => {
+    const separator = ";"
+    const columns = Object.keys(recordset[0])
+    const heades = columns.join(separator)
+    const data = [heades]
+    for (const result of recordset) {
+        const lineData = []
+        for (const column of columns) {
+            const value = result[column]
+            const finalValue = value instanceof Date ? formatToISODateString(value) : value
+            lineData.push(finalValue)
+        }
+        data.push(lineData.join(separator))
+    }
+    return data.join("\n")
+}

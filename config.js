@@ -1,6 +1,7 @@
 import { MessageSecurityMode, SecurityPolicy, AttributeIds } from "node-opcua"
 import mssql from "mssql" 
 import fs from "fs"
+import fsp from "fs/promises"
 import jsonDiff from "json-diff"
 import { 
     createLogger, 
@@ -8,7 +9,10 @@ import {
     formatToISODateString,
     insertSQL, 
     extractText,
-    extractColumnNames
+    extractColumnNames,
+    driveInfo,
+    makeCsv,
+    createStringWriteNode
 } from "./util.js"
 
 // >>> SQL CONFIG
@@ -164,6 +168,27 @@ const opcDataDieluOnData = (res, env) => {
     values.push(dtToISO(value.kontrolaDMC.dateTime))
 
     return insertSQL(OPC_DATA_DIELU_SQL.tableName, dataDielyColumns, values)
+}
+
+const saveToUSB = async (_, env) => {
+    try {
+        const sqlReq = new mssql.Request()
+        const sqlRes = await sqlReq.query(`SELECT * FROM ${OPC_DATA_DIELU_SQL.tableName} ORDER BY id DESC;`)
+        const csvData = makeCsv(sqlRes.recordset)
+
+        const removable = await driveInfo(2)
+        if (removable.length === 0) throw new Error("No USB")
+        const driveLetter = removable[0].deviceID
+        
+        const path = driveLetter + "/AS18_data_dielu.csv"
+        await fsp.writeFile(path, csvData)
+        logger.debug("Data exported to removable drive " + removable.volumeName)
+    } catch (e) {
+        logger.error("error on usb save" + e.message)
+        const writeNode = createStringWriteNode('ns=3;s="Export_databazy_DB"."text_chyby"', e.message)
+        await env.session.write(writeNode)
+        return 3
+    }
 }
 
 export const OPC_AUDIT_TRAIL = {
@@ -323,6 +348,11 @@ export const OPC = {
             readNode: { nodeId: 'ns=3;s="DataDielov"."RobotDatabaza"', attribudeId: AttributeIds.Value },
             onData: opcDataDieluOnData
         },
+        {
+            name: "Export na USB",
+            watchNodeId: 'ns=3;s="Export_databazy_DB"."status_exportu"',
+            onData: saveToUSB
+        }
         // {
         //     name: "Audit Trail PLC",
         //     watchNodeId: 'ns=3;s="SQL_AuditTrail"."triggerZapisDatDoPlc"',

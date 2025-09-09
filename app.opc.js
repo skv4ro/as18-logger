@@ -58,11 +58,12 @@ const initInstance = (session, instance) => {
         }
         
         if (value === triggerValue && instance.runtime.status === INSTANCE_STATUS.READY_TO_TRIGGER) {
+            writeNode.value.value.value = acknowledgeValue // resetovanie acknowledge value
             instance.runtime.status = INSTANCE_STATUS.BUSY
             logger.debug(`update triggered on instance ${instanceName}, triggerValue ${triggerValue}`)
             try {
                 const start = new Date()
-                const res = await session.read(instance.readNode)
+                const res = instance.readNode ? await session.read(instance.readNode) : null
                 const end = new Date()
                 const elapsed = end - start
                 logger.debug(`instacne ${instanceName} read data in ${elapsed} ms`)
@@ -73,7 +74,8 @@ const initInstance = (session, instance) => {
                     session: session
                 }
                 const startOnData = new Date()
-                await instance.onData(res, envData)
+                const newAckValue = await instance.onData(res, envData)
+                if (typeof newAckValue === 'number' && Number.isInteger(newAckValue)) writeNode.value.value.value = newAckValue
                 const endOnData = new Date()
                 const elapsedOnData = endOnData - startOnData
                 logger.debug(`instance ${instanceName} performed onData function in ${elapsedOnData} ms`)
@@ -86,7 +88,7 @@ const initInstance = (session, instance) => {
                 const elapsedWrt = wrtEnd - wrtStart 
                 logger.trace(`write response: ${JSON.stringify(writeRes)} of ${instanceName}`)
                 if (writeRes.value === 0) {
-                    logger.debug(`instance ${instanceName} ack value ${acknowledgeValue} written in ${elapsedWrt} ms`)
+                    logger.debug(`instance ${instanceName} ack value ${writeNode.value.value.value} written in ${elapsedWrt} ms`)
                 } else {
                     throw new Error(`cannot write ack value for instance ${instanceName} 
                         (${writeNode}: ${writeRes.value} ${writeRes.description})`)

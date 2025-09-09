@@ -4,7 +4,7 @@ import mssql from "mssql"
 import path from "path"
 import { WEB as CONFIG_WEB, SQL_CONFIG, OPC_ALARMY_SQL, OPC as CONFIG_OPC, OPC_DATA_DIELU_SQL, LOGGER_CONFIG, OPC_AUDIT_TRAIL } from "./config.js"
 import { fileURLToPath } from "url"
-import { formatToISODateString } from "./util.js"
+import { formatToISODateString, makeCsv } from "./util.js"
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -84,23 +84,6 @@ const readTableData = async (tableName, start, end) => {
     `)
     pool.close()
     return res
-}
-
-const makeCsv = recordset => {
-    const separator = ";"
-    const columns = Object.keys(recordset[0])
-    const heades = columns.join(separator)
-    const data = [heades]
-    for (const result of recordset) {
-        const lineData = []
-        for (const column of columns) {
-            const value = result[column]
-            const finalValue = value instanceof Date ? formatToISODateString(value) : value
-            lineData.push(finalValue)
-        }
-        data.push(lineData.join(separator))
-    }
-    return data.join("\n")
 }
 
 app.use(express.static("public"))
